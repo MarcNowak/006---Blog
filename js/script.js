@@ -45,7 +45,8 @@ const
   // z klasą .post
   optArticleSelector = '.post',
   optTitleSelector = '.post-title',
-  optTitleListSelector = '.titles';
+  optTitleListSelector = '.titles',
+  optArticleTagsSelector = '.post-tags .list';
 
 function generateTitleLinks() {
 
@@ -109,11 +110,55 @@ function generateTitleLinks() {
   // console.log('zawartość zmiennej html: ', html);
 
   const links = document.querySelectorAll('.titles a');
-  console.log('co zawiera stała links: ', links);
+  // console.log('co zawiera stała links: ', links);
 
   for (let link of links) {
     link.addEventListener('click', titleClickHandler);
   }
 }
 
+
+function generateTags() {
+  /* find all articles */
+  const articles = document.querySelectorAll(optArticleSelector);
+
+  /* START LOOP: for every article: */
+  for (let article of articles) {
+
+    /* find tags wrapper */
+    const titleList = article.querySelector(optArticleTagsSelector);
+    // console.log('zawartość titleList: ', titleList);
+
+    /* make html variable with empty string */
+    let html = '';
+
+    /* get tags from data-tags attribute */
+    const articleTags = article.getAttribute('data-tags');
+    // console.log('zawartość articleTags: ', articleTags);
+
+    /* split tags into array */
+    const articleTagsArray = articleTags.split(' ');
+    // console.log('podzielone tagi articleTagsArray: ', articleTagsArray);
+
+    /* START LOOP: for each tag */
+    for (let tag of articleTagsArray) {
+      // console.log('wyświetlam każdy tagów z osobna: ', tag);
+
+      /* generate HTML of the link */
+      const tagLinkHTML = '<li><a href="#tag-' + tag + '"><span>' + tag + '</span></a></li>';
+      console.log('wyświetla link do każdego taga: ', tagLinkHTML);
+
+      /* add generated code to html variable */
+      html += tagLinkHTML;
+
+      /* END LOOP: for each tag */
+
+      /* insert HTML of all the links into the tags wrapper */
+      titleList.innerHTML = titleList.innerHTML + ' ' + tagLinkHTML;
+    }
+    /* END LOOP: for every article: */
+  }
+}
+
 generateTitleLinks();
+generateTags();
